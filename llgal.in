@@ -1749,11 +1749,11 @@ sub generate_slides {
 		}
 	    } else {
 		# real image
-		$THIS_SLIDE = "<img src=\"$entry->{url}\" " ;
-		$THIS_SLIDE .= "style=\"width: $entry->{scaled_xdim}px; height: $entry->{scaled_ydim}px;\" "
-		    unless $opts->{slide_dimensions_from_css} ;
+		$THIS_SLIDE = "<div class=\"bg-blur\"><img src=\"$entry->{url}\" " ;
+		#$THIS_SLIDE .= "style=\"width: $entry->{scaled_xdim}px; height: $entry->{scaled_ydim}px;\" "
+		    #unless $opts->{slide_dimensions_from_css} ;
 		$THIS_SLIDE .= "alt=\"$opts->{alt_full_text}$entry->{title} $entry->{dimstring}\" "
-		    ."title=\"$entry->{title} $entry->{dimstring}\" />" ;
+		    ."title=\"$entry->{title} $entry->{dimstring}\" /></div>" ;
 
 	    }
 	} elsif ($entry->{scaled_url}) {
@@ -1853,7 +1853,7 @@ sub generate_slides {
 		    ."<td class=\"exif-value\">$value</td></tr>\n"
 		    if defined $value ;
 	    }
-	    $EXIF_TABLE = "<table class=\"exif\">\n". $EXIF_TABLE ."</table>" ;
+	    $EXIF_TABLE = "<table class=\"exif table\">\n". $EXIF_TABLE ."</table>" ;
 	}
 
 	#################################
@@ -2021,20 +2021,21 @@ sub generate_index {
 	}
 
 	# Table header
-	if ($opts->{show_film_effect}) {
-	    print IXW "<table class=\"index with-tile\" style=\"border-spacing: ", $opts->{index_cellpadding}, "px 0px;\">\n" ;
-	} else {
-	    print IXW "<table class=\"index\" style=\"border-spacing: ", $opts->{index_cellpadding}, "px 0px;\">\n" ;
-	}
+	#if ($opts->{show_film_effect}) {
+	#    print IXW "<table class=\"index with-tile\" style=\"border-spacing: ", $opts->{index_cellpadding}, "px 0px;\">\n" ;
+	#} else {
+	#    print IXW "<table class=\"index\" style=\"border-spacing: ", $opts->{index_cellpadding}, "px 0px;\">\n" ;
+	#    print IXW "<div class=\"photo-item\">\n" ;
+	#}
 
 	# Row header
 	# include the image to force the height of the line. we could do it in the css but IE css support sucks a lot
-	print IXW "  <tr><td class=\"tiled\" colspan=\"". ($num+2) ."\">"
+	print IXW "  <div>"
 	    ."<img src=\"$self->{local_llgal_dir}/$opts->{filmtile_filename}\" alt=\"$opts->{alt_film_tile_text}\" />"
-	    ."</td></tr>\n"
+	    ."</div>\n"
 	    if $opts->{show_film_effect} ;
-	print IXW "  <tr>\n" ;
-	print IXW "    <td class=\"thumb\">&nbsp;</td>\n"
+	print IXW "  \n" ;
+	print IXW "    <div class=\"thumb\">&nbsp;</div>\n"
 	    if $opts->{show_film_effect} ;
 
 	# Actual row of thumbnails
@@ -2077,37 +2078,37 @@ sub generate_index {
 	    if ($entry->{thumb_url}) {
 		# either IMG, or with a user-given thumbnail
 
-		print IXW "    <td class=\"thumb\" ";
-		print IXW "style=\"width: ${box_width}px; height: ${box_height}px;\" "
-		    unless $opts->{thumbnails_dimensions_from_css} ;
+		#print IXW "    <td class=\"thumb\" ";
+		print IXW "  <div class=\"photo-item\"";
+		
 		print IXW ">\n" ;
 
 		if ($type == $TYPE_TEXT and $opts->{make_no_slides}) {
 		    # thumbnail without any link
 		    print IXW "      <img src=\"$entry->{thumb_url}\" "
 			."title=\"$title $entry->{scaled_dimstring}\" ";
-		    print IXW "style=\"width: ${thumb_width}px; height: ${thumb_height}px;\" "
-			unless $opts->{thumbnails_dimensions_from_css} ;
+		    #print IXW "style=\"width: ${thumb_width}px; height: ${thumb_height}px;\" "
+			#unless $opts->{thumbnails_dimensions_from_css} ;
 		    print IXW "alt=\"$linktext $entry->{thumb_dimstring}\" />\n" ;
 		} else {
 		    # thumbnail linking to the slide
 		    print IXW "      <a href=\"$link\" "
 			."title=\"$title $entry->{scaled_dimstring}\">\n" ;
 		    print IXW "	       <img src=\"$entry->{thumb_url}\" ";
-		    print IXW "style=\"width: ${thumb_width}px; height: ${thumb_height}px;\" "
-			unless $opts->{thumbnails_dimensions_from_css} ;
+		    #print IXW "style=\"width: ${thumb_width}px; height: ${thumb_height}px;\" "
+			#unless $opts->{thumbnails_dimensions_from_css} ;
 		    print IXW "alt=\"$linktext $entry->{thumb_dimstring}\" />\n" ;
-		    print IXW "	     </a>" ;
+		    print IXW "	     </a>\n" ;
 		}
 
-		print IXW "    </td>\n" ;
+		print IXW "</div>\n" ;
 
 	    } else {
 		# not IMG, without thumbnail
 
-		print IXW "    <td class=\"text-thumb\" ";
-		print IXW "style=\"width: ${box_width}px; height: ${box_height}px;\" "
-		    unless $opts->{thumbnails_dimensions_from_css} ;
+		print IXW "    <div class=\"text-thumb\" ";
+		#print IXW "style=\"width: ${box_width}px; height: ${box_height}px;\" "
+		    #unless $opts->{thumbnails_dimensions_from_css} ;
 		print IXW ">\n";
 
 		if ($type == $TYPE_TEXT and $opts->{make_no_slides}) {
@@ -2119,49 +2120,49 @@ sub generate_index {
 		    print IXW "      <a href=\"$link\" title=\"$title $entry->{dimstring}\">$entry->{linktext}</a>\n" ;
 		}
 
-		print IXW "    </td>\n" ;
+		print IXW "    </div>\n" ;
 	    }
 
 	    $messages->update_percentage ($i+$j+1) ;
 	}
 
 	# Row footer
-	print IXW "    <td class=\"thumb\">&nbsp;</td>\n"
+	print IXW "    <div class=\"thumb\">&nbsp;</td>\n"
 	    if $opts->{show_film_effect} ;
-	print IXW "  </tr>\n" ;
-	print IXW "  <tr><td class=\"tiled\" colspan=\"". ($num+2) ."\">"
+	#print IXW "  </tr>\n" ;
+	print IXW "  <div class=\"tiled\" colspan=\"". ($num+2) ."\">"
 	    ."<img src=\"$self->{local_llgal_dir}/$opts->{filmtile_filename}\" alt=\"$opts->{alt_film_tile_text}\" />"
-	    ."</td></tr>\n"
+	    ."</div>\n"
 	    if $opts->{show_film_effect} ;
 
 	# Dimensions and filesizes
 	if ($opts->{show_dimensions} or $opts->{show_size}) {
-	    print IXW "  <tr>\n" ;
-	    print IXW "    <td>&nbsp;</td>\n"
+	    print IXW "  \n" ;
+	    print IXW "    <div>&nbsp;</div>\n"
 		if $opts->{show_film_effect} ;
 	    for (my $j = 0; $j < $num; $j++) {
 		my $entry = $entries[$i+$j] ;
-		print IXW "    <td class=\"thumb-dim\">$entry->{scaled_dimstring}</td>\n" ;
+		print IXW "    <div class=\"thumb-dim\">$entry->{scaled_dimstring}</div>\n" ;
 	    }
-	    print IXW "    <td>&nbsp;</td>\n"
+	    print IXW "    <div>&nbsp;</div>\n"
 		if $opts->{show_film_effect} ;
-	    print IXW "  </tr>\n" ;
+	    print IXW "  \n" ;
 	}
 
 	# Write image captions under images if option -u is given
 	if ($opts->{show_caption_under_thumbnails}) {
-	    print IXW "  <tr>\n" ;
-	    print IXW "<td>&nbsp;</td>\n"
+	    print IXW "  \n" ;
+	    print IXW "<div>&nbsp;</div>\n"
 		if $opts->{show_film_effect} ;
 	    for (my $j = 0; $j < $num; $j++) {
 		my $entry = $entries[$i+$j] ;
-		print IXW "    <td class=\"thumb-caption\">$entry->{caption}</td>\n" ;
+		print IXW "    <div class=\"thumb-caption\">$entry->{caption}</div>\n" ;
 	    }
-	    print IXW "  </tr>\n" ;
+	    print IXW " \n" ;
 	}
 
 	# Table footer
-	print IXW "</table>\n" ;
+	print IXW "\n" ;
 
 	$i += $num ;
     }
