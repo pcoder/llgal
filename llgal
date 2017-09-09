@@ -1749,13 +1749,13 @@ sub generate_slides {
 		}
 	    } else {
 		# real image
-		$THIS_SLIDE = "<div class=\"bg-blur\" style=\"background-image:-webkit-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),url($entry->{url});
-		background-image:-webkit-linear-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),url($entry->{url});
-		background-image:-o-linear-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),rgba(9,0,0,0.9)),url($entry->{url});
-		background-image:-ms-linear-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),rgba(9,0,0,0.9)),url($entry->{url});
-		background-image:linear-gradient(left,rgba(255,255,255,0.7),url($entry->{url});
-		\">
-		<img src=\"$entry->{url}\" " ;
+		#$THIS_SLIDE = "<div class=\"bg-blur\" style=\"background-image:-webkit-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),url($entry->{url});
+		#background-image:-webkit-linear-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),url($entry->{url});
+		#background-image:-o-linear-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),rgba(9,0,0,0.9)),url($entry->{url});
+		#background-image:-ms-linear-gradient(left,rgba(255,255,255,0.7),rgba(9,0,0,0.9)),rgba(9,0,0,0.9)),url($entry->{url});
+		#background-image:linear-gradient(left,rgba(255,255,255,0.7),url($entry->{url});
+		#\">
+		$THIS_SLIDE = "<div class=\"bg-blur\"><img src=\"$entry->{url}\" " ;
 		#$THIS_SLIDE .= "style=\"width: $entry->{scaled_xdim}px; height: $entry->{scaled_ydim}px;\" "
 		    #unless $opts->{slide_dimensions_from_css} ;
 		$THIS_SLIDE .= "alt=\"$opts->{alt_full_text}$entry->{title} $entry->{dimstring}\" "
